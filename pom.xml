@@ -3,17 +3,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.taobao</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0.3</version>
-    </parent>
-
     <groupId>com.alibaba.smart.framework</groupId>
     <artifactId>smart-engine</artifactId>
-    <!--  mvn versions:set -DnewVersion=2.0.2-SNAPSHOT -DgenerateBackupPoms=false  -->
-    <!--  mvn versions:set -DnewVersion=2.0.0 -DgenerateBackupPoms=false  -->
-    <version>2.0.2-SNAPSHOT</version>
+    <!--  mvn versions:set -DnewVersion=2.0.8-SNAPSHOT -DgenerateBackupPoms=false  -->
+    <!--  mvn versions:set -DnewVersion=2.1.0 -DgenerateBackupPoms=false  -->
+    <version>2.1.0</version>
 
     <packaging>pom</packaging>
     <name>Smart Engine</name>
@@ -23,15 +17,14 @@
     <inceptionYear>2016</inceptionYear>
 
     <scm>
-        <connection>scm:git:git@github.com:alibaba/SmartEngine.git</connection>
-        <developerConnection>scm:git:git@github.com:alibaba/SmartEngine.git</developerConnection>
-        <url>https://github.com/alibaba/SmartEngine</url>
-        <tag>smart-engine-2.0.0</tag>
+        <connection>scm:git:ssh://git@github.com:alibaba/SmartEngine.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:alibaba/SmartEngine.git</developerConnection>
+        <url>https://github.com/alibaba/SmartEngine/tree/master</url>
     </scm>
 
     <developers>
         <developer>
-            <id>vai</id>
+            <id>geecoodeer</id>
             <name>Haijun Gao</name>
             <email>ghjapple@163.com</email>
         </developer>
@@ -46,18 +39,18 @@
         </license>
     </licenses>
 
-    <!--<distributionManagement>-->
-        <!--<snapshotRepository>-->
-            <!--<id>ossrh</id>-->
-            <!--<name>OSS Snapshots Repository</name>-->
-            <!--<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
-        <!--</snapshotRepository>-->
-        <!--<repository>-->
-            <!--<id>ossrh</id>-->
-            <!--<name>OSS Staging Repository</name>-->
-            <!--<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-        <!--</repository>-->
-    <!--</distributionManagement>-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>OSS Snapshots Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>OSS Staging Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <java.source.version>1.6</java.source.version>
@@ -70,12 +63,14 @@
         <slf4j.version>1.7.13</slf4j.version>
         <gpg.skip>true</gpg.skip>
         <javadoc.opts>-Xdoclint:none</javadoc.opts>
+        <maven.test.skip>true</maven.test.skip>
+
     </properties>
 
     <modules>
         <module>core</module>
 
-
+        <module>extension/integration/spring-starter</module>
 
         <module>extension/storage/storage-common</module>
         <module>extension/storage/storage-custom</module>
@@ -101,12 +96,18 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
 
 
     </dependencies>
@@ -205,9 +206,10 @@
                 <version>${slf4j.version}</version>
                 <scope>provided</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
+                <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -219,8 +221,6 @@
                 <artifactId>mvel2</artifactId>
                 <version>2.4.4.Final</version>
             </dependency>
-
-
 
 
             <!-- spring AOP 包 -->
@@ -266,7 +266,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.6</version>
+                <version>8.0.16</version>
                 <scope>test</scope>
             </dependency>
 
@@ -277,8 +277,18 @@
                 <scope>test</scope>
             </dependency>
 
-
-
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.6.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>5.6.2</version>
+                <scope>test</scope>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -316,7 +326,8 @@
                     <relocations>
                         <relocation>
                             <pattern>com.esotericsoftware.reflectasm</pattern>
-                            <shadedPattern>com.alibaba.smart.framework.engine.shaded.com.esotericsoftware.reflectasm</shadedPattern>
+                            <shadedPattern>com.alibaba.smart.framework.engine.shaded.com.esotericsoftware.reflectasm
+                            </shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.mvel2</pattern>
@@ -334,90 +345,143 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                 <groupId>org.codehaus.mojo</groupId>
-                 <artifactId>versions-maven-plugin</artifactId>
-                 <version>2.1</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                </configuration>
-            </plugin>
 
             <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
-            <!--<version>2.10.4</version>-->
-            <!--<configuration>-->
-            <!--<encoding>UTF-8</encoding>-->
-            <!--<aggregate>true</aggregate>-->
-            <!--<charset>UTF-8</charset>-->
-            <!--<docencoding>UTF-8</docencoding>-->
-            <!--<additionalparam>${javadoc.opts}</additionalparam>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>attach-javadocs</id>-->
-            <!--<goals>-->
-            <!--<goal>jar</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
-
-            <!--<plugin>-->
-                <!--<artifactId>maven-gpg-plugin</artifactId>-->
-                <!--<version>1.4</version>-->
-                <!--<configuration>-->
-                    <!--&lt;!&ndash;<skip>${gpg.skip}</skip>&ndash;&gt;-->
-                <!--</configuration>-->
+                <!--<artifactId>maven-deploy-plugin</artifactId>-->
+                <!--<version>2.8.2</version>-->
                 <!--<executions>-->
                     <!--<execution>-->
-                        <!--<id>sign-artifacts</id>-->
-                        <!--<phase>verify</phase>-->
+                        <!--<id>default-deploy</id>-->
+                        <!--<phase>deploy</phase>-->
                         <!--<goals>-->
-                            <!--<goal>sign</goal>-->
+                            <!--<goal>deploy</goal>-->
                         <!--</goals>-->
                     <!--</execution>-->
                 <!--</executions>-->
             <!--</plugin>-->
 
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>versions-maven-plugin</artifactId>-->
+                <!--<version>2.1</version>-->
+            <!--</plugin>-->
+
+
+
+
+
+
+
+
+
         </plugins>
     </build>
 
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>3.0.0-M1</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>release</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <aggregate>true</aggregate>
+                            <charset>UTF-8</charset>
+                            <docencoding>UTF-8</docencoding>
+                            <additionalparam>${javadoc.opts}</additionalparam>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.2</version>
+                        <configuration>
+                            <skipTests>${maven.test.skip}</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.22.2</version>
+                    </plugin>
+
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
